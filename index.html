@@ -81,12 +81,34 @@
         .hidden {
             display: none;
         }
+
+        .icons-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .icons-container a {
+            margin: 0 10px;
+            display: block;
+        }
+
+        .icons-container img {
+            width: 40px; /* Adjust size as needed */
+            height: auto;
+        }
     </style>
 </head>
 <body>
     <div class="title-container">
         <h2 id="subtitle"></h2>
         <h3 id="beBackSoon">Thanks For Watching</h3>
+    </div>
+
+    <div class="icons-container">
+        <a href="#" target="_blank"><img src="discord.png" alt="Discord"></a>
+        <a href="#" target="_blank"><img src="youtube.png" alt="YouTube"></a>
+        <a href="#" target="_blank"><img src="twitch.png" alt="Twitch"></a>
     </div>
 
     <script>
