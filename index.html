@@ -3,144 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Particle Animation</title>
+    <title>Particle Background with Centered Text</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');
+        @font-face {
+            font-family: 'Iomanoid';
+            src: url('fonts/Iomanoid.ttf') format('truetype');
+        }
 
         body {
             margin: 0;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
-            background-color: black;
-            font-family: 'Josefin Sans', sans-serif;
-            flex-direction: column;
-        }
-
-        .title-container {
-            position: relative;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1, h2, h3 {
-            color: white;
-            font-family: 'Josefin Sans', sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 5rem;
-            margin: 0;
-            padding: 7px;
+            background-color: black;
+            overflow: hidden;
+            position: relative;
+            font-family: 'Iomanoid', sans-serif;
+            color: white;
         }
 
-        .letter {
-            opacity: 0;
-            animation: fadeInOut 3s linear infinite;
-        }
-
-        @keyframes fadeInOut {
-            0%, 100% {
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
+        .particle-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
         }
 
         .particle {
             position: absolute;
-            background-color: red;
             border-radius: 50%;
-            animation: move 10s linear infinite;
+            opacity: 0.8;
         }
 
-        .particle.black {
-            background-color: rgb(0, 0, 0);
+        .particle.red {
+            background-color: red;
         }
 
-        @keyframes move {
-            0% {
-                transform: translate(0, 0);
+        .particle.white {
+            background-color: white;
+        }
+
+        .centered-text {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .stream-ended {
+            font-size: 10rem; /* Adjust the font size as needed */
+            color: rgb(221, 12, 12);
+            margin-bottom: 20px;
+            animation: fade 2s infinite alternate;
+        }
+
+        .next-stream {
+            font-size: 2rem;
+            color: white;
+            margin-top: -40px;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
             }
-            100% {
-                transform: translate(1920px, 1080px);
+            to {
+                opacity: 1;
             }
         }
 
-        #beBackSoon {
-            color: red;
-            font-size: 3rem;
-            margin-top: 20px;
-            font-weight: normal; /* Remove bold */
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .icons-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .icons-container a {
-            margin: 0 10px;
-            display: block;
-        }
-
-        .icons-container img {
-            width: 40px; /* Adjust size as needed */
-            height: auto;
+        @keyframes move-up {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-100vh);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="title-container">
-        <h2 id="subtitle"></h2>
-        <h3 id="beBackSoon">Thanks For Watching</h3>
+    <div class="particle-container"></div>
+    <div class="centered-text">
+        <div class="stream-ended" id="stream-ended"></div>
     </div>
-
-    <div class="icons-container">
-        <a href="#" target="_blank"><img src="discord.png" alt="Discord"></a>
-        <a href="#" target="_blank"><img src="youtube.png" alt="YouTube"></a>
-        <a href="#" target="_blank"><img src="twitch.png" alt="Twitch"></a>
+    <div class="centered-text next-stream">
+        SEE YA IN NEXT STREAM
     </div>
-
     <script>
-        const subtitleText = "STREAM ENDED";
-        const subtitleElement = document.getElementById("subtitle");
+        document.addEventListener('DOMContentLoaded', () => {
+            const particleContainer = document.querySelector('.particle-container');
+            const particleCount = 90;
 
-        subtitleElement.innerHTML = '';
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.classList.add(Math.random() > 0.5 ? 'red' : 'white');
 
-        for (let i = 0; i < subtitleText.length; i++) {
-            const span = document.createElement('span');
-            span.className = 'letter';
-            span.style.animationDelay = `${i * 0.5}s`;
-            span.textContent = subtitleText[i];
-            subtitleElement.appendChild(span);
-        }
+                particle.style.width = `${Math.random() * 5 + 2}px`;
+                particle.style.height = particle.style.width;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = '100%';
 
-        const numberOfParticles = 90;
+                particleContainer.appendChild(particle);
 
-        for (let i = 0; i < numberOfParticles; i++) {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-            if (Math.random() > 0.5) {
-                particle.classList.add('black');
+                animateParticle(particle);
             }
-            particle.style.width = `${Math.random() * 10 + 5}px`;
-            particle.style.height = particle.style.width;
-            particle.style.top = `${Math.random() * 100}vh`;
-            particle.style.left = `${Math.random() * 100}vw`;
-            particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
-            particle.style.animationDelay = `${Math.random() * 10}s`;
-            document.body.appendChild(particle);
-        }
+
+            function animateParticle(particle) {
+                const duration = Math.random() * 5 + 3;
+                const delay = Math.random() * 5;
+
+                particle.style.animation = `move-up ${duration}s linear ${delay}s infinite`;
+            }
+
+            // Streaming Ended text animation
+            const endedText = "STREAM ENDED";
+            const endedElement = document.getElementById('stream-ended');
+
+            endedText.split('').forEach((char, index) => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.style.animationDelay = `${index * 0.2}s`;
+                endedElement.appendChild(span);
+            });
+        });
     </script>
 </body>
 </html>
