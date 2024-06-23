@@ -3,132 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Particle Background with Centered Text</title>
+    <title>NEXUS Vertical Text</title>
     <style>
         @font-face {
-            font-family: 'Iomanoid';
-            src: url('fonts/Iomanoid.ttf') format('truetype');
+            font-family: 'Rostave';
+            src: url('Rostave.woff2') format('woff2'), 
+                 url('Rostave.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* Set margin and padding to 0 for body and all elements */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             background-color: black;
-            overflow: hidden;
-            position: relative;
-            font-family: 'Iomanoid', sans-serif;
-            color: white;
+            display: flex;
+            height: 100vh;
+            overflow: hidden; /* Prevent vertical scrollbar */
         }
 
-        .particle-container {
+        .left-half, .right-half {
+            width: 50%;
+            height: 100%;
+            position: relative;
+            overflow: hidden; /* Hide overflow content */
+        }
+
+        .left-half {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* Align items to the left */
+            padding-left: 20px; /* Add padding to the left */
+        }
+
+        .vertical-text {
+            font-family: 'Rostave', sans-serif;
+            color: rgb(125, 124, 124);
+            font-size: 90px;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            margin-right: 20px; /* Space between text and image */
+        }
+
+        .image {
+            width: 500px; /* Adjust the size as needed */
+            height: auto;
+            opacity: 1; /* Initially visible */
+            transition: opacity 0.5s ease-in-out; /* Smooth transition effect */
+            margin-left: 20px; /* Space between text and image */
+        }
+
+        .text-alternate {
+            font-family: 'Rostave', sans-serif;
+            color: white;
+            font-size: 60px; /* Decrease text size */
+            opacity: 0; /* Initially hidden */
             position: absolute;
+            left: 300px; /* Move a bit to the right */
+            top: 50%;
+            transform: translateY(-50%);
+            transition: opacity 0.5s ease-in-out; /* Smooth transition effect */
+        }
+
+        .divider {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px; /* Adjust thickness of the line */
+            background-color: white;
+            transform: translateX(-50%);
+            z-index: 1; /* Ensure it's above other content */
+        }
+
+        .right-half {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: black; /* Ensure canvas is on a black background */
+            position: relative;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 400px;
+            left: 300px;
+            font-family: 'Rostave', sans-serif;
+            color: white;
+            font-size: 24px;
+        }
+
+        .tg {
+            color: red;
+        }
+
+        #particle-canvas {
             width: 100%;
             height: 100%;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .particle {
             position: absolute;
-            border-radius: 50%;
-            opacity: 0.8;
+            top: 0;
+            left: 0;
         }
-
-        .particle.red {
-            background-color: red;
-        }
-
-        .particle.white {
-            background-color: white;
-        }
-
-        .centered-text {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .stream-ended {
-            font-size: 10rem; /* Adjust the font size as needed */
-            color: rgb(221, 12, 12);
-            margin-bottom: 20px;
-            animation: fade 2s infinite alternate;
-        }
-
-        .next-stream {
-            font-size: 2rem;
-            color: white;
-            margin-top: -40px;
-        }
-
-        @keyframes fade {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes move-up {
-            from {
-                transform: translateY(0);
-            }
-            to {
-                transform: translateY(-100vh);
-            }
-        }
+        
     </style>
 </head>
 <body>
-    <div class="particle-container"></div>
-    <div class="centered-text">
-        <div class="stream-ended" id="stream-ended"></div>
+    <div class="left-half">
+        <div class="vertical-text">NEXUS</div>
+        <img src="ga.gif" alt="GA Logo" class="image" id="toggle-element">
+        <div class="text-alternate" id="toggle-text">ENDED</div>
     </div>
-    <div class="centered-text next-stream">
-        SEE YA IN NEXT STREAM
+    <div class="divider"></div>
+    <div class="right-half">
+        <div class="footer">
+            See you next time! 💖<br>
+            NEXUS.<br>
+            - Team <span class="tg">TG</span>
+        </div>
+        <canvas id="particle-canvas"></canvas>
     </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const particleContainer = document.querySelector('.particle-container');
-            const particleCount = 90;
+        function toggleImageText() {
+            const image = document.getElementById('toggle-element');
+            const text = document.getElementById('toggle-text');
+            setInterval(function () {
+                if (image.style.opacity !== '0') {
+                    image.style.opacity = '0';
+                    text.style.opacity = '1';
+                } else {
+                    image.style.opacity = '1';
+                    text.style.opacity = '0';
+                }
+            }, 5000); // Toggle every 5 seconds
+        }
 
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                particle.classList.add(Math.random() > 0.5 ? 'red' : 'white');
+        function createParticles() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth; // Set canvas size to match container
+            canvas.height = window.innerHeight;
 
-                particle.style.width = `${Math.random() * 5 + 2}px`;
-                particle.style.height = particle.style.width;
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = '100%';
+            // Array to store particles
+            const particles = [];
 
-                particleContainer.appendChild(particle);
+            // Function to create a single particle
+            function createParticle() {
+                const particle = {
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 1, // Random radius between 1 and 3
+                    color: Math.random() < 0.5 ? 'blue' : 'white', // Randomly choose blue or white
+                    velocity: {
+                        x: (Math.random() - 0.5) * 2, // Random velocity in x direction
+                        y: (Math.random() - 0.5) * 2  // Random velocity in y direction
+                    }
+                };
 
-                animateParticle(particle);
+                particles.push(particle);
             }
 
-            function animateParticle(particle) {
-                const duration = Math.random() * 5 + 3;
-                const delay = Math.random() * 5;
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                particle.style.animation = `move-up ${duration}s linear ${delay}s infinite`;
+                particles.forEach(particle => {
+                    // Move particle
+                    particle.x += particle.velocity.x;
+                    particle.y += particle.velocity.y;
+
+                    // Draw particle
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+
+                    // Wrap around edges
+                    if (particle.x < 0 || particle.x > canvas.width || particle.y < 0 || particle.y > canvas.height) {
+                        particle.x = Math.random() * canvas.width;
+                        particle.y = Math.random() * canvas.height;
+                    }
+                });
+
+                // Reduce particle count over time
+                if (particles.length > 50) {
+                    particles.splice(0, 1); // Remove oldest particle
+                }
+
+                // Create new particles gradually
+                if (Math.random() > 0.95) {
+                    createParticle();
+                }
             }
 
-            // Streaming Ended text animation
-            const endedText = "STREAM ENDED";
-            const endedElement = document.getElementById('stream-ended');
+            animate();
+        }
 
-            endedText.split('').forEach((char, index) => {
-                const span = document.createElement('span');
-                span.textContent = char;
-                span.style.animationDelay = `${index * 0.2}s`;
-                endedElement.appendChild(span);
-            });
-        });
+        window.onload = function () {
+            toggleImageText();
+            createParticles();
+        };
     </script>
 </body>
 </html>
