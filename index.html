@@ -3,282 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horizontal Text Example</title>
+    <title>Starting Soon</title>
     <style>
-        @font-face {
-            font-family: 'Rostave';
-            src: url('fonts/Rostave-Regular.woff2') format('woff2'),
-                 url('fonts/Rostave-Regular.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Aquire&display=swap');
 
         body {
             background-color: black;
-            margin: 0;
-            font-family: 'Rostave', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
+            margin: 0;
+            font-family: 'Aquire', sans-serif;
+            color: rgb(255, 255, 255);
+            text-align: center;
             position: relative;
+            overflow: hidden; /* Ensures no overflow beyond viewport */
         }
 
-        .particles {
-            position: fixed;
+        .background-svg {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Ensure particles are behind other content */
-            pointer-events: none; /* Allows clicks to pass through */
+            z-index: -1;
         }
 
-        .particle {
+        .header {
             position: absolute;
-            border-radius: 50%;
-            opacity: 0.8; /* Adjust opacity as needed */
-            animation: moveParticle linear infinite, blink 1s infinite alternate; /* Blink animation */
-        }
-
-        .blue-particle {
-            background-color: blue;
-        }
-
-        .white-particle {
-            background-color: white;
-        }
-
-        .vertical-text {
-            position: absolute;
-            left: -300px;
-            top: 50%;
-            transform: translateY(-50%) rotate(-90deg);
-            color: rgb(87, 87, 87);
-            font-size: 8rem; /* Adjust the size as needed */
-            white-space: nowrap;
-        }
-
-        .gif-container {
-            margin-right: 20px; /* Adjust spacing between gif and text */
-        }
-
-        .text-container {
-            position: relative; /* Ensure proper positioning of absolute elements */
+            top: 20px;
+            left: 20px;
             display: flex;
             align-items: center;
-            justify-content: center; /* Center content horizontally */
-            flex-direction: column; /* Stack elements vertically */
-        }
-
-        .ga-gif {
-            width: 450px; /* Adjust size as needed */
-            height: auto;
-            margin-left: 0; /* Adjust margin if needed */
-        }
-
-        .horizontal-text {
-            color: white;
-            font-size: 5rem; /* Adjust the size as needed */
-            white-space: nowrap;
-            margin-bottom: 20px; /* Spacing below the text */
-        }
-
-        .horizontal-text.white {
-            color: white;
-            font-size: 2rem; /* Adjust size as needed */
-            white-space: nowrap;
-        }
-
-        .horizontal-text.white#stream {
-            position: absolute;
-            top: -50px;
-            left: 500px; /* Adjust horizontal positioning */
-            transform: translateX(-50%);
-        }
-
-        .horizontal-text span.blue {
-            animation: colorChange 1s infinite alternate;
-        }
-
-        .loading-animation {
-            width: 100px; /* Width of the loading animation */
-            height: 20px; /* Height of the loading animation */
-            background-color: blue; /* Background color */
-            border-radius: 4px; /* Rounded corners */
-            animation: loadingAnimation 1s infinite; /* Animation */
-        }
-        p {
-            color: blue;
             font-size: 2rem;
-            margin-top: -20px;
+        }
+
+        .header img {
+            width: 40px;
+            height: 40px;
+            margin-left: 20px;
+        }
+
+        h1 {
+            font-size: 3rem; /* Adjust the font size as needed */
+            margin-bottom: -40px; /* Remove default margin */
+            margin-left: -900px;
+            color: black;
+        }
+
+        h2 {
+            font-size: 10rem; /* Adjust the font size as needed */
+            margin-top: 40px; /* Adjust this value to move the text down */
         }
         
-
-        @keyframes moveParticle {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(var(--translate-x), var(--translate-y)); /* Random endpoint */
-            }
+        h1, h2 {
+            text-align: center;
         }
 
-        @keyframes colorChange {
-            0% {
-                color: blue;
-            }
-            100% {
-                color: white;
-            }
+        h3 {
+            font-size: 3rem;
+            margin-top: -130px;
+            margin-right: -100px;
+            color: red;
         }
 
-        @keyframes loadingAnimation {
-            0% {
-                width: 0; /* Start with no width */
-            }
-            50% {
-                width: 100px; /* Halfway, full width */
-            }
-            100% {
-                width: 0; /* End with no width */
-            }
+        .countdown {
+            font-size: 4rem; /* Adjust the font size for countdown */
+            margin-top: 20px; /* Space between text and countdown */
         }
 
-        /* Blink Animation */
-        @keyframes blink {
-            0%, 100% {
+        .main-content {
+            margin-top: 100px; /* Adjust this margin to move the main content down */
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .footer span.nexus {
+            color: white; /* Make Nexus in white color */
+        }
+
+        .footer span.tg {
+            color: red; /* Make TG in red color */
+        }
+
+        /* Particle Animation CSS */
+        @keyframes particles {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
                 opacity: 1;
             }
-            50% {
+            100% {
+                transform: translateY(100vh) rotate(360deg) scale(0);
                 opacity: 0;
             }
         }
 
-        @media (max-width: 768px) {
-            .vertical-text {
-                font-size: 4rem; /* Reduce font size for smaller screens */
-                left: -200px; /* Adjust positioning */
+        /* Red rain drops animation */
+        @keyframes raindrops-red {
+            0% {
+                transform: translateY(-10px) rotate(0deg);
+                opacity: 1;
             }
-
-            .ga-gif {
-                width: 250px; /* Reduce gif size */
-            }
-            
-
-            .horizontal-text {
-                font-size: 3rem; /* Reduce font size */
-            }
-            
-
-            .horizontal-text.white {
-                font-size: 1.5rem; /* Reduce font size */
-            }
-
-            .horizontal-text.white#stream {
-                top: -30px; /* Adjust positioning */
-                left: 250px; /* Adjust positioning */
-            }
-
-            .loading-animation {
-                width: 80px; /* Reduce width */
-                height: 15px; /* Reduce height */
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
             }
         }
 
-        @media (max-width: 480px) {
-            .vertical-text {
-                font-size: 2rem; /* Further reduce font size */
-                left: -100px; /* Adjust positioning */
+        /* Black droplets animation */
+        @keyframes droplets-black {
+            0% {
+                transform: translateY(-5px) rotate(0deg);
+                opacity: 1;
             }
-
-            .ga-gif {
-                width: 150px; /* Further reduce gif size */
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
             }
-
-            .horizontal-text {
-                font-size: 2rem; /* Further reduce font size */
-            }
-
-            .horizontal-text.white {
-                font-size: 1rem; /* Further reduce font size */
-            }
-
-            .horizontal-text.white#stream {
-                top: -20px; /* Adjust positioning */
-                left: 125px; /* Adjust positioning */
-            }
-
-            .loading-animation {
-                width: 50px; /* Further reduce width */
-                height: 10px; /* Further reduce height */
-            }
-            
         }
+
+        /* Apply animations based on background color */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            animation: droplets-black 1s linear infinite; /* Default for black background */
+        }
+
+        body.red::before {
+            animation: raindrops-red 1s linear infinite; /* Animation for red background */
+        }
+
+        /* Increase particle count */
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            animation: particles 3s linear infinite;
+            opacity: 0;
+            border-radius: 50%;
+        }
+
+        /* Customize particle appearance */
+        .particle:nth-child(1) {
+            left: 10%;
+            height: 10px;
+            width: 10px;
+            animation-duration: 5s;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            left: 20%;
+            height: 5px;
+            width: 5px;
+            animation-duration: 4s;
+            animation-delay: 1s;
+        }
+
+        .particle:nth-child(3) {
+            left: 30%;
+            height: 8px;
+            width: 8px;
+            animation-duration: 6s;
+            animation-delay: 2s;
+        }
+
+        /* Add more particles as needed */
+        /* .particle:nth-child(n) {
+            left: ...%;
+            height: ...px;
+            width: ...px;
+            animation-duration: ...s;
+            animation-delay: ...s;
+        } */
     </style>
 </head>
 <body>
+    <svg class="background-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color: red; stop-opacity: 1" />
+                <stop offset="100%" style="stop-color: black; stop-opacity: 1" />
+            </linearGradient>
+        </defs>
+        <polygon points="0,0 100,0 0,100" fill="url(#grad1)" />
+    </svg>
+
+    <div class="header">
+        <div>RECENTS</div>
+        <img src="twitch.png" alt="Twitch"><span>OJGAMESV2_RD</span>
+        <img src="youtube.png" alt="YouTube"><span>daniel hartmann</span>
+    </div>
+
+    <div class="main-content">
+        <h1>STREAM</h1><h2> wrapped up</h2>
+        <h3>Lets meet in next stream</h3>
+        
+    </div>
+
+    <div class="footer">
+        <span class="nexus">NEXUS.</span><span class="tg">TG</span>
+    </div>
+
+    <!-- Particles -->
     <div class="particles">
-        <!-- Blue and White particles will be generated here -->
-    </div>
-
-    <div class="vertical-text">NEXUS</div>
-    
-    <div class="gif-container">
-        <img src="ga.gif" class="ga-gif" width="50" height="50" />
-    </div>
-
-    <div class="text-container">
-        <div class="horizontal-text white" id="stream">STREAM</div>
-        <div class="horizontal-text" id="starting-soon">WRAPPED UP</div>
-        <p>See You In The Next Stream ❤️</p>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <!-- Add more particles as needed -->
+        <!-- <div class="particle"></div> -->
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const textElement = document.getElementById('starting-soon');
-            const text = textElement.textContent;
-            let newText = '';
+        // Set the countdown time in minutes
+        const countdownTime = 10; // 10 minutes
 
-            for (let i = 0; i < text.length; i++) {
-                newText += `<span>${text[i]}</span>`;
+        // Calculate the end time of the countdown
+        const endTime = new Date();
+        endTime.setMinutes(endTime.getMinutes() + countdownTime);
+
+        // Function to update countdown every second
+        function updateCountdown() {
+            const currentTime = new Date();
+            const difference = endTime - currentTime;
+
+            // Calculate remaining time
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            // Display the countdown timer
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            // Check if countdown has finished
+            if (difference <= 0) {
+                clearInterval(countdownInterval); // Stop the countdown
+                countdownElement.textContent = '00:00'; // Display 00:00 when countdown ends
             }
+        }
 
-            textElement.innerHTML = newText;
+        // Initial call to update countdown immediately
+        updateCountdown();
 
-            function animateRandomCharacter() {
-                const spans = textElement.querySelectorAll('span');
-                spans.forEach(span => span.classList.remove('blue'));
-
-                const randomIndex = Math.floor(Math.random() * spans.length);
-                spans[randomIndex].classList.add('blue');
-            }
-
-            setInterval(animateRandomCharacter, 500);
-
-            // Function to generate particles
-            function generateParticles() {
-                const particlesContainer = document.querySelector('.particles');
-                const particleCount = 100; // Number of particles to generate
-
-                for (let i = 0; i < particleCount; i++) {
-                    const particle = document.createElement('div');
-                    particle.classList.add('particle');
-                    particle.classList.add(i % 2 === 0 ? 'blue-particle' : 'white-particle');
-                    particle.style.width = particle.style.height = `${Math.random() * 5 + 2}px`;
-                    particle.style.top = `${Math.random() * 100}vh`;
-                    particle.style.left = `${Math.random() * 100}vw`;
-                    particle.style.setProperty('--translate-x', `${Math.random() * 200 - 100}vw`);
-                    particle.style.setProperty('--translate-y', `${Math.random() * 200 - 100}vh`);
-                    particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
-
-                    particlesContainer.appendChild(particle);
-                }
-            }
-
-            generateParticles();
-        });
+        // Update countdown every second
+        const countdownInterval = setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
